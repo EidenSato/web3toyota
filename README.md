@@ -47,5 +47,6 @@ python demo.py
 * soichi@eiden-gp.co.jp
  
 # License 
-Copyright (c) 2023 Soichi Sato  "hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+Copyright (c) 2023 Soichi Sato  
+"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 
