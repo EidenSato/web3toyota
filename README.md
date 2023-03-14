@@ -42,18 +42,10 @@ python demo.py
 注意点などがあれば書く
  
 # Author
+* 佐藤　総一
+* 営電株式会社　第二技術部
+* soichi@eiden-gp.co.jp
  
-作成情報を列挙する
- 
-* 作成者
-* 所属
-* E-mail
- 
-# License
-ライセンスを明示する
- 
+# License 
 "hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
- 
-社内向けなら社外秘であることを明示してる
- 
-"hoge" is Confidential.
+
