@@ -15,14 +15,11 @@ http://eidensato.html.xdomain.jp/hasoto/index.html
 point確認ボタン、更新ボタンを押すと、それぞれ、ポイント、メッセージが最新の状態に更新される。  
 メッセージの青丸は自分が相手に送ったメッセージ。黄丸は相手からもらったメッセージ。丸の中の数字が取得したポイント。
 
-# Requirement
- 
-"hoge"を動かすのに必要なライブラリなどを列挙する
- 
-* huga 3.5.2
-* hogehuga 1.0.2
- 
-# Installation
+# 資料
+プレゼンテーション資料  
+https://github.com/EidenSato/web3toyota/blob/main/web3_slides.pdf
+マニュアル  
+
  
 Requirementで列挙したライブラリなどのインストール方法を説明する
  
