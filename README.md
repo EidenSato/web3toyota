@@ -4,7 +4,7 @@
 
 # ファイル
 contractsフォルダーにスマートコントラクトのソース（Solidity)    
-critentフォルダーにwebアプリのhtmlファイル等  
+clitentフォルダーにwebアプリのhtmlファイル等  
 が入っています。
 
 # デモ
