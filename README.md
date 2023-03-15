@@ -22,8 +22,8 @@ https://github.com/EidenSato/web3toyota/blob/main/web3_slides.pdf
 https://github.com/EidenSato/web3toyota/blob/main/web3_hasoto.pdf
  
 # Author
-* 佐藤　総一
-* 営電株式会社　第二技術部
+* 佐藤　総一(Soichi Sato)
+* 営電株式会社　第二技術部(Eiden Co.,Ltd.)
 * soichi@eiden-gp.co.jp
  
 # License 
