@@ -18,28 +18,8 @@ point確認ボタン、更新ボタンを押すと、それぞれ、ポイント
 # 資料
 プレゼンテーション資料  
 https://github.com/EidenSato/web3toyota/blob/main/web3_slides.pdf  
-マニュアル  
-
- 
-Requirementで列挙したライブラリなどのインストール方法を説明する
- 
-```bash
-pip install huga_package
-```
- 
-# Usage
- 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
- 
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
-```
- 
-# Note
- 
-注意点などがあれば書く
+詳細マニュアル  
+https://github.com/EidenSato/web3toyota/blob/main/web3_hasoto.pdf
  
 # Author
 * 佐藤　総一
