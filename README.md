@@ -28,5 +28,5 @@ https://github.com/EidenSato/web3toyota/blob/main/web3_hasoto.pdf
  
 # License 
 Copyright (c) 2023 Soichi Sato  
-"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+"無償の愛" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
 
