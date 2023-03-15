@@ -17,7 +17,7 @@ point確認ボタン、更新ボタンを押すと、それぞれ、ポイント
 
 # 資料
 プレゼンテーション資料  
-https://github.com/EidenSato/web3toyota/blob/main/web3_slides.pdf
+https://github.com/EidenSato/web3toyota/blob/main/web3_slides.pdf  
 マニュアル  
 
  
