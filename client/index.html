@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- web3 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.2/web3.min.js"></script>
+    <title>無償の愛（Home）</title>
+    <!-- ABI -->
+    <script src="./abi.js"></script>
+    <!-- Address list -->
+    <script src="./address.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">無償の愛</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./total.html">ポイント数集計</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <h1 class="text-center" id="header">今日もウエルビーイングの取組頑張ってね💛</h1>
+        </header>
+         <!-- トップメッセージと女の子の画像 -->
+        <div class="text-center girlimage">
+            <img src="./pic1.png" class="img-fluid" alt="Responsive image">
+            <p>
+                画像　タイトル：[ジュエルセイバーFREE] URL：[ <a href="http://www.jewel-s.jp/" target=”_blank”
+                    rel="noopener noreferrer">http://www.jewel-s.jp/</a>]
+            </p>
+        </div>
+        <!-- メタマスクの接続 -->
+        <div class="row p-1">
+            <div class="col-10 mt-2">
+                <p id="username" class="h2 bg-warning text-truncate">null</p>
+            </div>
+            <div class="col-2 d-grid">
+                <button type="button" class="btn btn-warning login">
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+        <!-- 獲得ポイントの表示 -->
+        <div class="row p-1">
+            <div class="col-10 mt-2">
+                <p id="totalpoints" class="h2 bg-info">ポイントはウオーレットを接続すると確認できるわよ</p>
+            </div>
+            <div class="col-2 d-grid">
+                <button type="button" class="btn btn-info tpoints disabled">
+                    point確認
+                </button>
+            </div>
+        </div>
+        <!-- メッセージ送信フォーム -->
+        💛メッセージを送る💛
+        <div class="row">
+            <div class="col-10 bg-info">
+                <form>
+
+                    <div class="mb-1">
+                        <label for="toWalletAddress" class="form-label">Wallet address</label>
+                        <select class="select form-select mb-1 userList">
+                            <option value="0" selected>User input</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="0x000...000" id="toWalletAddress">
+                    </div>
+                    <div class="mb-2">
+                        <label for="toTextMessage" class="form-label">Message（20文字以内）</label>
+                        <input type="text" class="form-control" placeholder="（例）ありがとう、頑張ってますね、こんにちわ" id="toTextMessage">
+                    </div>
+                </form>
+            </div>
+            <div class="col-2 bg-info d-grid pt-2 pb-2 pr-2">
+                <button type="button" class="btn btn-danger sendMessage disabled">Send</button>
+            </div>
+        </div>
+        <!-- メッセージ表示 -->
+        <div class="row p-1">
+            <div class="col-12 mt-2">
+                最新のメッセージ（最大 10）
+                <button type="button" class="btn btn-success msgupdate disabled">
+                    更新
+                </button>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <div id="mesg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let web3, user, hasotoInst;
+        //ganache const hasotoAddr = "0x6b9D52a7f4dC46209b59B973A410C3aa7FEbEBb5";
+        const hasotoAddr = "0x00510aF860B69116E082Fe38fB6dDc586F8CF8eE";
+        //web3初期化
+        $(document).ready(() => {
+            if (window.ethereum) {
+                web3 = new Web3(Web3.givenProvider);
+            }
+            //ユーザーリスト追加（初期設定）
+            let n = addresslist.length;
+            let adr, name;
+            for (let i = 0; i < n; i++) {
+                adr = addresslist[i].address;
+                name = addresslist[i].name;
+                $(".select.userList").append('<option value="' + adr + '">' + name + '</option>');
+            }
+        })
+        //メタマスク接続
+        $(".btn.login").click(async () => {
+            try {
+                const accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                });
+                user = accounts[0];
+                hasotoInst = new web3.eth.Contract(abi.hasoto, hasotoAddr, { from: user });
+                //console.log(user);
+                $("#username").html(user);
+                $(".btn").removeClass("disabled");
+                pointdisp();
+                msgdisp();
+            } catch (error) {
+                alert(error.message);
+            }
+        })
+        //ポイント確認ボタン
+        $(".btn.tpoints").click(async () => {
+            pointdisp();
+        })
+        //メッセージ更新ボタン
+        $(".btn.msgupdate").click(async () => {
+            msgdisp();
+        })
+        //ユーザーリスト変更
+        $(".select.userList").change(async () => {
+            var adr = $("option:selected").val();
+            if (adr == "0") {
+                $("#toWalletAddress").val("");
+                $("#toWalletAddress").attr('readonly', false);
+            } else {
+                $("#toWalletAddress").val(adr);
+                $("#toWalletAddress").attr('readonly', true);
+            }
+        })
+        //メッセージ送信ボタン
+        $(".btn.sendMessage").click(async () => {
+            try {
+                const toadd = $("#toWalletAddress").val();
+                const tomsg = $("#toTextMessage").val();
+                await hasotoInst.methods.postLetter(toadd, tomsg).send()
+                .then((receipt) =>{
+                    //console.log(receipt);
+                    const p = receipt.events.NewLetter.returnValues._points;
+                    const msg =  p + 'ポイントもらえました💛';
+                    $("#header").html(msg);
+                });
+                //女の子の画像の入れ替え
+                $(".girlimage").children("img").attr('src', './pic2.png')
+            } catch {
+                alert(error.message);
+            }
+        })
+        //ポイント表示関数
+        async function pointdisp() {
+            try {
+                const totl = await hasotoInst.methods.totalPoints(user, 0).call();
+                const msg = 'あなたのポイントは ' + totl + ' ポイントよ';
+                $("#totalpoints").html(msg);
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+        //メッセージ表示関数
+        async function msgdisp() {
+            try {
+                const num = await hasotoInst.methods.totalLetters().call();
+                let from, to, points, time, text;
+                let letter;
+                //$("#testValue").html(letter.text);
+                //$("#mesg").html('test');
+                let msg = '<ul class="list-group">';
+                let viewnum = 0;
+                let t, uruu, minus, hour, min, sec, year, mon, day;
+                for (let i = (num - 1); i >= 0; i--) {
+                    //手紙のブロックチェーンのデータを取得する。
+                    letter = await hasotoInst.methods.letters(i).call();
+                    from = letter.from;
+                    to = letter.to;
+                    points = letter.points;
+                    time = Number(letter.time);
+                    text = letter.text;
+                    //日時変換
+                    year = 1970;
+                    uruu = false;
+                    time += 32400;//UTC +9 hour
+                    //年の計算
+                    t = time;
+                    do {
+                        if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+                            minus = 31622400;//うるう年 366日
+                            uruu = true;
+                        } else {
+                            minus = 31536000;
+                            uruu = false;
+                        }
+                        if ((t - minus) >= 0) {
+                            t -= minus;
+                            year++;
+                        } else {
+                            break;
+                        }
+                    } while (true);
+                    //月の計算
+                    month = 1;
+                    do {
+                        if (month === 2) {
+                            if (uruu === true) {
+                                minus = 2505600;//うるう年29日
+                            } else {
+                                minus = 2419200;//年28日
+                            }
+                        } else if (month === 4 || month === 6 || month === 9 || month === 11) {
+                            minus = 2592000;//30日
+                        } else {
+                            minus = 2678400;//31日
+                        }
+                        //1,3,5,7,9,11月
+                        if ((t - minus) >= 0) {
+                            t -= minus;
+                            month++;
+                        } else {
+                            break;
+                        }
+                    } while (month <= 12);
+                    //日時分秒の計算
+                    day = parseInt(t / 86400) + 1;
+                    hour = parseInt((time % 86400) / 3600, 10);
+                    min = parseInt((time % 3600) / 60, 10);
+                    sec = time % 60;
+                    //手紙のブロックチェーンのデータを表示する
+                    if (from.toString().toLowerCase() == user.toString().toLowerCase()) {
+                        //手紙を送った場合
+                        msg += '<li class="list-group-item"><div>To:';
+                        msg += await adrToName(to.toString());
+                        msg += '<span class="badge bg-primary rounded-pill ms-3">'
+                        msg += points.toString();
+                        msg += '</span></div><div>Message:';
+                        msg += '[' + year + '/' + month + '/' + day + '-' + hour + ':' + min + ':' + sec + ']';
+                        msg += text;
+                        msg += '</div></li>';
+                        viewnum++;
+                    } else if (to.toString().toLowerCase() == user.toString().toLowerCase()) {
+                        //手紙を受け取った場合
+                        msg += '<li class="list-group-item"><div>From:';
+                        msg += await adrToName(from.toString());
+                        msg += '<span class="badge bg-warning rounded-pill ms-3">'
+                        msg += points.toString();
+                        msg += '</span></div><div>Message:';
+                        msg += '[' + year + '/' + month + '/' + day + '-' + hour + ':' + min + ':' + sec + ']';
+                        msg += text;
+                        msg += '</div></li>';
+                        viewnum++;
+                    }
+                    if (viewnum >= 10) {
+                        break;
+                    }
+                }
+                msg += '</ul><hr>';
+                $("#mesg").html(msg);
+            } catch (error) {
+                alert(error.message);
+            }
+
+        }
+        async function adrToName(adr) {
+            let n = addresslist.length;
+            let rname = "";
+            for (let i = 0; i < n; i++) {
+                if (addresslist[i].address == adr) {
+                    rname = addresslist[i].name;
+                }
+            }
+            if (rname == "") {
+                return (adr);
+            }
+            return (rname);
+        }
+    </script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
